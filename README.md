@@ -108,13 +108,13 @@ Ensure you have a GPU enabled environment for local VLM inference or appropriate
 
 Bash
 
-`# Install core ML dependencies
-pip install git+https://github.com/huggingface/transformers accelerate 
-pip install opencv-python pymupdf qwen-vl-utils langgraph
+- \# Install core ML dependencies
+- pip install git+https://github.com/huggingface/transformers accelerate 
+- pip install opencv-python pymupdf qwen-vl-utils langgraph
 
-# Install frontend dependencies
-cd web-dashboard
-npm install`
+- \# Install frontend dependencies
+- cd web-dashboard
+- npm install`
 
 ### 3. Environment Configuration
 
@@ -122,8 +122,12 @@ Create a `.env` file containing the following keys:
 
 - `AWS_ACCESS_KEY_ID`: For S3 and Step Function access.
 - `DASHSCOPE_API_KEY`: For Qwen-VL cloud inference.
-- `DATABASE_URL`: Connection string for PostgreSQL or MongoDB
+- `DATABASE_URL`: Connection string for PostgreSQL or MongoDB.
 
-### 📜 License
+
+
+---
+
+## 📜 License
 
 GradeOps is released under the MIT License. See the `LICENSE` file for more detai
