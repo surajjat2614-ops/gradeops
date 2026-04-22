@@ -122,11 +122,8 @@ Create a `.env` file containing the following keys:
 
 - `AWS_ACCESS_KEY_ID`: For S3 and Step Function access.
 - `DASHSCOPE_API_KEY`: For Qwen-VL cloud inference.
-- `DATABASE_URL`: Connection string for PostgreSQL or MongoDB.
+- `DATABASE_URL`: Connection string for PostgreSQL or MongoDB
 
----
-
-
-## 📜 License
+### 📜 License
 
 GradeOps is released under the MIT License. See the `LICENSE` file for more detai
