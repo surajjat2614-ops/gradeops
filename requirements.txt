@@ -1,0 +1,16 @@
+# Image & PDF Processing
+opencv-python
+pymupdf
+pillow
+
+# AI & Deep Learning (VLM Support)
+torch
+torchvision
+accelerate
+transformers>=4.49.0
+qwen-vl-utils[decord]==0.0.8
+
+# Agentic Orchestration & Logic
+langgraph
+langchain
+nltk
