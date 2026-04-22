@@ -126,15 +126,6 @@ Create a `.env` file containing the following keys:
 
 ---
 
-## 🤝 Collaboration and Mentorship
-
-This project was developed under the guidance of industry experts to ensure the system meets real world classroom needs.
-
-**Mentors:**
-
-- **Abhinav Rai** (Phone: 7004772095)
-
----
 
 ## 📜 License
 
