@@ -33,7 +33,6 @@ def generate_rubric(question_text, marking_scheme_text=None):
     }}
     """
 
-    # For Day 3, you can use the Qwen2.5-7B-Instruct (text-only) or Gemini/GPT API
     messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     inputs = processor(text=[text], return_tensors="pt").to(model.device)
