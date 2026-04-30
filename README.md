@@ -323,7 +323,8 @@ Future development focuses on making the system more adaptive, scalable, and use
 
 ## 📜 License
 
-MIT License
+- MIT License
+  
 ---
 
 ## 👨‍💻 Author
