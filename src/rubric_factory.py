@@ -12,28 +12,39 @@ def generate_rubric(question_text, marking_scheme_text=None):
         else "No marking scheme provided. Generate sensible criteria from the question alone."
     )
 
+    # ---> UPDATED PROMPT HERE <---
     prompt = f"""
-    Act as an Expert Curriculum Designer. Convert this into a structured JSON Rubric.
+    Act as an Expert Curriculum Designer. Convert the QUESTION and MARKING SCHEME into a structured JSON Rubric.
 
     QUESTION: {question_text}
     {scheme_section}
 
-    Reply ONLY with this exact JSON, nothing else:
+    STRICT RULES:
+    1. DO NOT copy placeholder text like "what student must mention". Write actual, specific grading criteria based on the subject matter.
+    2. The `max_score` MUST be the exact mathematical sum of all the `points` in the criteria array.
+    3. If no marking scheme is provided, use your domain knowledge to deduce the exact formulas, keywords, or steps the student needs to show.
+
+    Reply ONLY with this exact JSON schema (this is an example format, replace with actual data):
     {{
         "question_id": "q1",
-        "max_score": <total marks>,
+        "max_score": 10,
         "criteria": [
             {{
                 "id": "c1",
-                "description": "what student must mention",
-                "points": <marks>,
-                "type": "computational|conceptual|notation"
+                "description": "Student correctly identifies the primary cause.",
+                "points": 5,
+                "type": "conceptual"
+            }},
+            {{
+                "id": "c2",
+                "description": "Student uses the correct formula.",
+                "points": 5,
+                "type": "computational"
             }}
         ]
     }}
     """
 
-    # For Day 3, you can use the Qwen2.5-7B-Instruct (text-only) or Gemini/GPT API
     messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     inputs = processor(text=[text], return_tensors="pt").to(model.device)
@@ -51,4 +62,9 @@ def generate_rubric(question_text, marking_scheme_text=None):
       return extract_json(raw_output)
     except (json.JSONDecodeError, ValueError):
       print("Failed to parse rubric. Raw output:\n", raw_output)
-      return None
+      # ---> FALLBACK DICTIONARY INSTEAD OF 'None' <---
+      return {
+          "question_id": "error_q",
+          "max_score": 10,
+          "criteria": [{"id": "c1", "description": "Manual grading required due to rubric generation failure.", "points": 10, "type": "conceptual"}]
+      }
