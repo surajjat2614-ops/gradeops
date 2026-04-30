@@ -328,8 +328,8 @@ MIT License
 
 ## 👨‍💻 Author
 
-Hrimaan Karigapsa
-Suraj Jat
-Surya Narayan
+- Hrimaan Karigapsa
+- Suraj Jat
+- Surya Narayan
 
 ---
