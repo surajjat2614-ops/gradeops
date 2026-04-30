@@ -6,6 +6,8 @@ from grader import grading_node
 
 def rubric_node(state: GradeOpsState):
     rubric = generate_rubric(state["question_text"], state["marking_scheme_text"])
+    if rubric is None:
+        raise ValueError("Rubric generation failed — check model output")
     return {"rubric": rubric}
 
 def build_grading_graph():
