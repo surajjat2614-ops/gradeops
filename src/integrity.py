@@ -1,54 +1,42 @@
-import json
-import re
-import torch
-from ocr_engine import model, processor
-from grader import extract_json
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
-def generate_rubric(question_text, marking_scheme_text=None):
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
-    scheme_section = (
-        f"MARKING SCHEME: {marking_scheme_text}"
-        if marking_scheme_text
-        else "No marking scheme provided. Generate sensible criteria from the question alone."
-    )
-
-    prompt = f"""
-    Act as an Expert Curriculum Designer. Convert this into a structured JSON Rubric.
-
-    QUESTION: {question_text}
-    {scheme_section}
-
-    Reply ONLY with this exact JSON, nothing else:
-    {{
-        "question_id": "q1",
-        "max_score": <total marks>,
-        "criteria": [
-            {{
-                "id": "c1",
-                "description": "what student must mention",
-                "points": <marks>,
-                "type": "computational|conceptual|notation"
-            }}
-        ]
-    }}
+def detect_rejump_collusion(student_results, similarity_threshold=0.90):
     """
+    student_results: List of dicts containing 'justification', 'student_id' and 'error_axes'
+    """
+    flags = []
+    
+    # <-- MISSING FILTER: Ignore system errors so they aren't compared against each other
+    valid_results = [
+        res for res in student_results 
+        if "SYSTEM ERROR:" not in res['justification'] and "AI response could not be parsed" not in res['justification']
+    ]
 
-    # For Day 3, you can use the Qwen2.5-7B-Instruct (text-only) or Gemini/GPT API
-    messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = processor(text=[text], return_tensors="pt").to(model.device)
+    if len(valid_results) < 2:
+        return flags
 
-    with torch.no_grad():
-        generated_ids = model.generate(**inputs, max_new_tokens=512, do_sample=False)
+    justifications = [res['justification'] for res in valid_results]
+    embeddings = embedder.encode(justifications) 
 
-    raw_output = processor.batch_decode(
-        [out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)],
-        skip_special_tokens=True,
-        clean_up_tokenization_spaces=False
-    )[0].strip()
+    for i, res_a in enumerate(valid_results):
+        for j, res_b in enumerate(valid_results):
+            if i >= j: continue
 
-    try:
-      return extract_json(raw_output)
-    except (json.JSONDecodeError, ValueError):
-      print("Failed to parse rubric. Raw output:\n", raw_output)
-      return None
+            similarity = cosine_similarity([embeddings[i]], [embeddings[j]])[0][0]
+            
+            # Using .get() prevents KeyError if error_axes is missing
+            shared_errors = set(res_a.get('error_axes', [])) & set(res_b.get('error_axes', []))
+
+            if similarity > similarity_threshold:
+                flags.append({
+                    "pair": (res_a['student_id'], res_b['student_id']),
+                    "confidence": round(float(similarity), 4),
+                    "shared_error_axes": list(shared_errors) if shared_errors else [],
+                    "reason": "Identical logic jump detected in reasoning trace."
+                })
+
+    return flags
