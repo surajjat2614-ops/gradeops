@@ -300,4 +300,36 @@ cd gradeops
 
 pip install git+https://github.com/huggingface/transformers accelerate
 pip install opencv-python pymupdf qwen-vl-utils[decord]==0.0.8 langgraph sentence-transformers
+```
 
+---
+
+## 📌 Project Status
+| Component | Status |
+|-----------|--------|
+| Preprocessing | Complete |
+| OCR Engine	| Complete |
+| Grading Engine | Complete |
+| Integrity Module |	Complete |
+| UI Dashboard |	In Progress |
+
+---
+
+## 🔮 Future Work
+
+Future development focuses on making the system more adaptive, scalable, and user friendly. Planned improvements include integration with learning management systems, real time analytics dashboards, adaptive rubric refinement based on historical grading data, and support for multiple languages and diverse handwriting styles. Additional research directions include improving reasoning alignment for complex multi step problems and incorporating feedback driven model updates.
+
+---
+
+## 📜 License
+
+MIT License
+---
+
+## 👨‍💻 Author
+
+Hrimaan Karigapsa
+Suraj Jat
+Surya Narayan
+
+---
