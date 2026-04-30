@@ -1,8 +1,8 @@
-# rubric_factory.py
-
 import json
+import re
 import torch
 from ocr_engine import model, processor
+from grader import extract_json
 
 def generate_rubric(question_text, marking_scheme_text=None):
 
@@ -33,6 +33,7 @@ def generate_rubric(question_text, marking_scheme_text=None):
     }}
     """
 
+    # For Day 3, you can use the Qwen2.5-7B-Instruct (text-only) or Gemini/GPT API
     messages = [{"role": "user", "content": [{"type": "text", "text": prompt}]}]
     text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
     inputs = processor(text=[text], return_tensors="pt").to(model.device)
@@ -46,4 +47,8 @@ def generate_rubric(question_text, marking_scheme_text=None):
         clean_up_tokenization_spaces=False
     )[0].strip()
 
-    return json.loads(raw_output)
+    try:
+      return extract_json(raw_output)
+    except (json.JSONDecodeError, ValueError):
+      print("Failed to parse rubric. Raw output:\n", raw_output)
+      return None
