@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GradeOps Vision | Dashboard</title>
+  <meta name="description" content="AI-powered exam grading dashboard with OCR, rubric generation, and plagiarism detection." />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=VT323&display=swap" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2310b981'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Inter' font-weight='800' font-size='18'%3EG%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/css/index.css?v=10" />
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ico-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></symbol>
+    <symbol id="ico-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 8.5a1 1 0 00.85 1.5h12.3a1 1 0 00.85-1.5L14 9V3"/></symbol>
+    <symbol id="ico-crop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.13 1L6 16a2 2 0 002 2h15"/><path d="M1 6.13L16 6a2 2 0 012 2v15"/></symbol>
+    <symbol id="ico-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></symbol>
+    <symbol id="ico-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+    <symbol id="ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="ico-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="ico-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+    <symbol id="ico-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></symbol>
+    <symbol id="ico-files" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2v-2"/><rect x="2" y="2" width="14" height="16" rx="2"/></symbol>
+    <symbol id="ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="ico-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="ico-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="ico-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+    <symbol id="ico-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></symbol>
+    <symbol id="ico-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="ico-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="ico-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="ico-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></symbol>
+    <symbol id="ico-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></symbol>
+    <symbol id="ico-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+    <symbol id="ico-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+    <symbol id="ico-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+    <symbol id="ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="ico-trending" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+    <symbol id="ico-chevleft" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></symbol>
+    <symbol id="ico-chevright" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
+    <symbol id="ico-hash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></symbol>
+    <symbol id="ico-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></symbol>
+  </svg>
+
+  <div id="notificationContainer" class="notification-container"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand" style="font-family: 'VT323', monospace; font-size: 2.5rem; letter-spacing: 3px; text-transform: uppercase; background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7, #34d399, #10b981); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientText 4s ease infinite; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(16,185,129,0.4));">GRADEOPS</div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" data-target="view-upload" id="nav-upload">
+          <svg class="icon"><use href="#ico-upload"/></svg><span>Upload Bundle</span><span class="step-badge">1</span>
+        </div>
+        <div class="nav-item" data-target="view-sandbox" id="nav-sandbox">
+          <svg class="icon"><use href="#ico-flask"/></svg><span>Sandbox</span><span class="step-badge"><svg class="icon-sm" style="width:10px;height:10px"><use href="#ico-zap"/></svg></span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item" data-target="view-crop" id="nav-crop">
+          <svg class="icon"><use href="#ico-crop"/></svg><span>Cropping Studio</span><span class="step-badge">2</span>
+        </div>
+        <div class="nav-item" data-target="view-pipeline" id="nav-pipeline">
+          <svg class="icon"><use href="#ico-play"/></svg><span>Pipeline</span><span class="step-badge">3</span>
+        </div>
+        <div class="nav-item" data-target="view-rubrics" id="nav-rubrics">
+          <svg class="icon"><use href="#ico-book"/></svg><span>Rubrics</span><span class="step-badge"><svg class="icon-sm" style="width:10px;height:10px"><use href="#ico-edit"/></svg></span>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item" data-target="view-results" id="nav-results">
+          <svg class="icon"><use href="#ico-chart"/></svg><span>Results &amp; Analytics</span><span class="step-badge">4</span>
+        </div>
+        <div class="nav-item" data-target="view-review" id="nav-review">
+          <svg class="icon"><use href="#ico-search"/></svg><span>Review Queue</span><span class="step-badge">5</span>
+        </div>
+        <div class="nav-item" data-target="view-plagiarism" id="nav-plagiarism">
+          <svg class="icon"><use href="#ico-shield"/></svg><span>Plagiarism</span><span class="step-badge">6</span>
+        </div>
+        <div class="nav-item" data-target="view-students" id="nav-students">
+          <svg class="icon"><use href="#ico-trending"/></svg><span>Student Reports</span><span class="step-badge">7</span>
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar">{{ user.username[0] | upper }}</div>
+          <div class="user-info">
+            <span class="user-name">{{ user.username }}</span>
+            <span class="user-role">{{ user.role }}</span>
+          </div>
+        </div>
+        <form method="post" action="/api/auth/logout">
+          <button class="btn btn-secondary" style="width:100%;font-size:.75rem;gap:.35rem"><svg class="icon-sm"><use href="#ico-logout"/></svg> Logout</button>
+        </form>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- 1. Upload -->
+      <section id="view-upload" class="view-section">
+        <h2 style="margin-bottom:.25rem;">Upload Exam Bundle</h2>
+        <p class="text-secondary mb-6">Upload your question paper, student answer sheets, and optional marking scheme.</p>
+        <div class="card">
+          <form id="uploadForm">
+            <div class="form-group">
+              <label class="form-label">Exam Name</label>
+              <input class="form-control" name="exam_name" placeholder="e.g., Midterm CS101 — Spring 2026" required />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
+              <div class="drop-zone" id="dz-qp" onclick="document.getElementById('file-qp').click()">
+                <div class="drop-zone-icon"><svg class="icon-lg"><use href="#ico-file"/></svg></div>
+                <div class="drop-zone-text">Question Paper</div>
+                <div class="drop-zone-hint">PDF, JPEG, PNG</div>
+                <input type="file" id="file-qp" name="question_paper" class="hidden" accept=".pdf,.jpg,.jpeg,.png" required onchange="updateFileName(this,'label-qp')" />
+                <span id="label-qp" class="badge badge-info hidden"></span>
+              </div>
+              <div class="drop-zone" id="dz-as" onclick="document.getElementById('file-as').click()">
+                <div class="drop-zone-icon"><svg class="icon-lg"><use href="#ico-files"/></svg></div>
+                <div class="drop-zone-text">Answer Sheets (Bulk)</div>
+                <div class="drop-zone-hint">Select multiple scans</div>
+                <input type="file" id="file-as" name="answer_sheets" multiple class="hidden" accept=".pdf,.jpg,.jpeg,.png" required onchange="updateFileName(this,'label-as',true)" />
+                <span id="label-as" class="badge badge-info hidden"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Marking Scheme (Optional)</label>
+              <div style="display:flex;gap:1rem;align-items:center;">
+                <input class="form-control" type="file" name="marking_scheme" accept=".pdf,.jpg,.jpeg,.png" style="padding:.35rem" />
+                <span class="text-muted" style="font-size:.75rem;white-space:nowrap;">Auto-generated by AI if omitted</span>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:1rem;">
+              <button type="submit" class="btn btn-primary" id="btn-upload">Upload & Create Session</button>
+            </div>
+          </form>
+          <div id="uploadResultContainer" class="hidden mt-4" style="background:var(--success-dim);border:1px solid rgba(52,211,153,.15);border-radius:var(--radius-sm);padding:.875rem">
+            <p class="text-success" style="margin:0;font-weight:600;font-size:.875rem" id="uploadResult"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sandbox -->
+      <section id="view-sandbox" class="view-section hidden">
+        <h2 style="margin-bottom:.25rem">Sandbox Mode</h2>
+        <p class="text-secondary mb-6">Skip the upload/OCR pipeline entirely. Load a dummy dataset and jump straight to analytics, review, and plagiarism.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.5rem">
+          <div class="card sandbox-preset" id="preset-math">
+            <div style="margin-bottom:.5rem"><svg class="icon-lg" style="color:var(--accent)"><use href="#ico-hash"/></svg></div>
+            <h3 style="margin-bottom:.25rem">Calculus Midterm</h3>
+            <p class="text-secondary" style="font-size:.8125rem;margin:0">80 students, 5 questions (max 20 pts each). Includes plagiarism flags, partial credit cases, and notation errors.</p>
+            <div style="margin-top:.75rem;display:flex;gap:.4rem;flex-wrap:wrap">
+              <span class="badge badge-info">80 students</span>
+              <span class="badge badge-warning">5 questions</span>
+              <span class="badge badge-danger">3-5 flags</span>
+            </div>
+          </div>
+          <div class="card sandbox-preset" id="preset-history">
+            <div style="margin-bottom:.5rem"><svg class="icon-lg" style="color:var(--accent-secondary)"><use href="#ico-book"/></svg></div>
+            <h3 style="margin-bottom:.25rem">History Final</h3>
+            <p class="text-secondary" style="font-size:.8125rem;margin:0">80 students, 5 essay questions (max 100 pts each). Includes conceptual errors, plagiarism pairs, and low-confidence OCR.</p>
+            <div style="margin-top:.75rem;display:flex;gap:.4rem;flex-wrap:wrap">
+              <span class="badge badge-info">80 students</span>
+              <span class="badge badge-warning">5 questions</span>
+              <span class="badge badge-danger">3-5 flags</span>
+            </div>
+          </div>
+        </div>
+        <div class="card sandbox-preset" id="preset-custom">
+          <div class="card-header"><h3 class="card-title">Custom Dataset</h3></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
+            <div class="form-group" style="margin:0"><label class="form-label">Students</label><input id="sandboxStudents" type="number" min="2" max="50" value="10" class="form-control" /></div>
+            <div class="form-group" style="margin:0"><label class="form-label">Questions</label><input id="sandboxQuestions" type="number" min="1" max="10" value="4" class="form-control" /></div>
+            <div class="form-group" style="margin:0"><label class="form-label">Max Score / Q</label><input id="sandboxMaxScore" type="number" min="1" max="100" value="10" class="form-control" /></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:.4rem;font-size:.8125rem;color:var(--text-secondary);cursor:pointer"><input type="checkbox" id="sandboxPlagiarism" checked style="accent-color:var(--accent)" /> Include plagiarism pairs</label>
+            <label style="display:flex;align-items:center;gap:.4rem;font-size:.8125rem;color:var(--text-secondary);cursor:pointer"><input type="checkbox" id="sandboxLowConf" checked style="accent-color:var(--accent)" /> Include low-confidence OCR</label>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:2rem">
+          <button id="runSandbox" class="btn btn-primary btn-lg" style="padding:.875rem 2.5rem;font-size:1rem;gap:.75rem">
+            <svg class="icon"><use href="#ico-zap"/></svg> Run Sandbox Simulation &rarr;
+          </button>
+        </div>
+        
+        <div id="sandboxConsole" class="card mt-6 hidden" style="background:#000;border:1px solid #333;font-family:monospace;color:#10b981;padding:1rem;font-size:.8125rem;max-height:240px;overflow-y:auto;border-radius:var(--radius-sm)">
+          <div style="color:#666;margin-bottom:.5rem;border-bottom:1px solid #222;padding-bottom:.5rem;display:flex;justify-content:space-between">
+            <span>GRADE-OPS SIMULATION CONSOLE [v2.4]</span>
+            <span id="consoleStatus">IDLE</span>
+          </div>
+          <div id="consoleLogs"></div>
+        </div>
+
+        <div id="sandboxStatus" class="hidden mt-4" style="background:var(--success-dim);border:1px solid rgba(52,211,153,.15);border-radius:var(--radius-sm);padding:.875rem">
+          <p class="text-success" style="margin:0;font-weight:600;font-size:.875rem" id="sandboxStatusText"></p>
+        </div>
+      </section>
+
+      <!-- 2. Cropping Studio -->
+      <section id="view-crop" class="view-section hidden">
+        <h2 style="margin-bottom:.25rem">Cropping Studio</h2>
+        <p class="text-secondary mb-4">Extract question text, then map answer coordinates on one template sheet.</p>
+        <div class="tab-bar">
+          <button id="tabQuestions" class="tab-btn active">1 &middot; Extract Questions</button>
+          <button id="tabAnswers" class="tab-btn">2 &middot; Map Answer Regions</button>
+        </div>
+        <div id="questionTabPanel" class="card">
+          <div class="card-header">
+            <h3 class="card-title">Draw & Extract Questions</h3>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="text-muted" style="font-size:.75rem">Page:</span>
+              <input id="questionPageIndex" type="number" min="0" value="0" class="form-control" style="width:65px;padding:.25rem .5rem" />
+              <button id="loadQuestionPreview" class="btn btn-secondary" style="padding:.4rem .75rem">Load</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.25rem">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <p class="text-muted mb-2" style="font-size:.8125rem">Draw a bounding box around each question on the paper.</p>
+                <p class="text-muted mb-2" style="font-size:.65rem"><kbd class="kbd" style="font-size:.6rem">Ctrl</kbd> + <svg class="icon-sm" style="vertical-align:text-top;width:10px;height:10px"><use href="#ico-refresh"/></svg> Scroll to Zoom</p>
+              </div>
+              <div class="canvas-container" style="overflow:auto;display:block;text-align:center"><canvas id="questionCanvas" style="display:inline-block"></canvas></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.75rem">
+              <div style="background:rgba(6,10,20,.4);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:.75rem;min-height:120px;display:flex;align-items:center;justify-content:center">
+                <img id="questionCropPreview" style="max-width:100%;max-height:120px;object-fit:contain;display:none" />
+                <span id="questionCropPlaceholder" class="text-muted" style="font-size:.8125rem">Crop preview</span>
+              </div>
+              <button id="previewQuestionCrop" class="btn btn-secondary" style="font-size:.75rem"><svg class="icon-sm"><use href="#ico-eye"/></svg> Preview Crop</button>
+              <button id="extractQuestion" class="btn btn-primary" style="font-size:.75rem"><svg class="icon-sm"><use href="#ico-sparkle"/></svg> Extract Question Text</button>
+              <div style="margin-top:.5rem">
+                <h4 class="mb-2" style="font-size:.8125rem">Extracted Questions</h4>
+                <div id="extractedQuestionsList" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:.4rem">
+                  <span class="text-muted" style="font-size:.75rem">None extracted yet.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="answerTabPanel" class="card hidden">
+          <div class="card-header">
+            <h3 class="card-title">Map Answer Coordinates</h3>
+            <div style="display:flex;gap:.5rem;align-items:center">
+              <span class="text-muted" style="font-size:.75rem">Sheet:</span>
+              <input id="answerSheetIndex" type="number" min="0" value="0" class="form-control" style="width:55px;padding:.25rem .5rem" />
+              <span class="text-muted" style="font-size:.75rem">Page:</span>
+              <input id="answerPageIndex" type="number" min="0" value="0" class="form-control" style="width:55px;padding:.25rem .5rem" />
+              <button id="loadAnswerPreview" class="btn btn-secondary" style="padding:.4rem .75rem">Load</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.25rem">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <p class="text-muted mb-2" style="font-size:.8125rem">Draw the answer region for each question. This template applies to ALL sheets.</p>
+                <p class="text-muted mb-2" style="font-size:.65rem"><kbd class="kbd" style="font-size:.6rem">Ctrl</kbd> + Scroll to Zoom</p>
+              </div>
+              <div class="canvas-container" style="overflow:auto;display:block;text-align:center"><canvas id="answerCanvas" style="display:inline-block"></canvas></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.75rem">
+              <div style="background:rgba(6,10,20,.4);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:.75rem;min-height:120px;display:flex;align-items:center;justify-content:center">
+                <img id="answerCropPreview" style="max-width:100%;max-height:120px;object-fit:contain;display:none" />
+                <span id="answerCropPlaceholder" class="text-muted" style="font-size:.8125rem">Crop preview</span>
+              </div>
+              <button id="previewAnswerCrop" class="btn btn-secondary" style="font-size:.75rem"><svg class="icon-sm"><use href="#ico-eye"/></svg> Preview Crop</button>
+              <div class="form-group" style="margin:.25rem 0">
+                <label class="form-label">Link to Question</label>
+                <select id="questionPicker" class="form-control"><option value="" disabled selected>Select question...</option></select>
+              </div>
+              <div class="form-group" style="margin:.25rem 0">
+                <label class="form-label">Max Marks for this Question</label>
+                <input id="questionMaxScore" type="number" min="1" step="0.5" value="10" class="form-control" style="width:100px">
+              </div>
+              <button id="useSelection" class="btn btn-primary" style="background:var(--warning);color:#000;font-size:.75rem"><svg class="icon-sm"><use href="#ico-link"/></svg> Bind to Question</button>
+              <div style="margin-top:.5rem">
+                <h4 class="mb-2" style="font-size:.8125rem">Mapped Coordinates</h4>
+                <div id="mappedCoordsList" style="max-height:140px;overflow-y:auto;display:flex;flex-direction:column;gap:.4rem">
+                  <span class="text-muted" style="font-size:.75rem">No coordinates mapped yet.</span>
+                </div>
+                <button id="saveCoords" class="btn btn-primary mt-4" style="width:100%;font-size:.75rem"><svg class="icon-sm"><use href="#ico-save"/></svg> Save Coordinate Templates</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Pipeline -->
+      <section id="view-pipeline" class="view-section hidden">
+        <div class="card" style="text-align:center;padding:3rem 2rem">
+          <div style="margin-bottom:1rem"><svg class="icon-xl" style="color:var(--accent)"><use href="#ico-rocket"/></svg></div>
+          <h2 class="mb-2">Agentic Grading Pipeline</h2>
+          <p class="text-secondary" style="max-width:550px;margin:0 auto 1rem">
+            OCR &rarr; Rubric Generation &rarr; AI Grading &rarr; Plagiarism Detection
+          </p>
+          <div class="pipeline-timer" id="pipelineTimer" style="display:none">00:00</div>
+          <div class="pipeline-steps" id="pipelineSteps">
+            <div class="pipeline-step" data-step="1"><div class="step-indicator">1</div><div class="step-text">Extracting handwritten text (OCR)</div></div>
+            <div class="pipeline-step" data-step="2"><div class="step-indicator">2</div><div class="step-text">Generating rubrics per question</div></div>
+            <div class="pipeline-step" data-step="3"><div class="step-indicator">3</div><div class="step-text">Grading with partial credit</div></div>
+            <div class="pipeline-step" data-step="4"><div class="step-indicator">4</div><div class="step-text">Running plagiarism detection</div></div>
+          </div>
+          <button id="runGrading" class="btn btn-primary" style="font-size:1rem;padding:.875rem 2.5rem;margin-top:1.5rem">
+            Run Grading Pipeline
+          </button>
+          <p id="pipelineStatusText" class="text-muted mt-4 hidden" style="font-size:.875rem"></p>
+        </div>
+      </section>
+
+      <!-- Rubric Template Editor -->
+      <section id="view-rubrics" class="view-section hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+          <h2 style="margin:0">Rubric Editor</h2>
+          <span class="badge badge-info" id="rubricEditorCount">0 rubrics saved</span>
+        </div>
+        <p class="text-secondary mb-4" style="font-size:.875rem">Define grading rubrics manually, or auto-generate with AI. Saved rubrics will be used by the grading pipeline instead of generating new ones.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Create / Edit Rubric</h3>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Question</label>
+              <select id="rubricQuestionPicker" class="form-control"><option value="" disabled selected>Select question...</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Score</label>
+              <input id="rubricMaxScore" type="number" min="1" max="100" value="10" class="form-control" style="width:120px" />
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+              <label class="form-label" style="margin:0">Criteria</label>
+              <button id="addCriterionBtn" class="btn btn-secondary" style="padding:.25rem .5rem;font-size:.7rem"><svg class="icon-sm"><use href="#ico-sparkle"/></svg> Add Row</button>
+            </div>
+            <div id="criteriaRows" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem;max-height:300px;overflow-y:auto">
+              <span class="text-muted" style="font-size:.75rem">Click "Add Row" to define criteria.</span>
+            </div>
+            <div style="display:flex;gap:.75rem">
+              <button id="saveRubricBtn" class="btn btn-primary" style="flex:1;font-size:.8125rem"><svg class="icon-sm"><use href="#ico-save"/></svg> Save Rubric</button>
+              <button id="aiGenerateRubricBtn" class="btn btn-secondary" style="flex:1;font-size:.8125rem"><svg class="icon-sm"><use href="#ico-zap"/></svg> AI Generate</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Saved Rubrics</h3>
+              <button id="refreshRubricsBtn" class="btn btn-secondary" style="padding:.3rem .6rem;font-size:.7rem"><svg class="icon-sm"><use href="#ico-refresh"/></svg></button>
+            </div>
+            <div id="savedRubricsList" style="display:flex;flex-direction:column;gap:.5rem;max-height:450px;overflow-y:auto">
+              <span class="text-muted" style="font-size:.75rem">No rubrics saved yet.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Results & Analytics -->
+      <section id="view-results" class="view-section hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem">
+          <h2 style="margin:0">Results & Analytics</h2>
+          <button id="loadDashboard" class="btn btn-secondary" style="font-size:.75rem"><svg class="icon-sm"><use href="#ico-refresh"/></svg> Refresh</button>
+        </div>
+        <div class="stat-grid" id="statsGrid">
+          <div class="stat-card"><div class="stat-icon"><svg class="icon-md"><use href="#ico-file"/></svg></div><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Graded</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg class="icon-md"><use href="#ico-trending"/></svg></div><div class="stat-value" id="statAvgScore">&mdash;</div><div class="stat-label">Avg Score</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg class="icon-md"><use href="#ico-target"/></svg></div><div class="stat-value" id="statAvgAccuracy">&mdash;</div><div class="stat-label">Avg AI Confidence</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg class="icon-md"><use href="#ico-alert"/></svg></div><div class="stat-value" id="statReview">0</div><div class="stat-label">Needs Review</div></div>
+          <div class="stat-card"><div class="stat-icon"><svg class="icon-md"><use href="#ico-shield"/></svg></div><div class="stat-value" id="statPlagiarism">0</div><div class="stat-label">Plagiarism Flags</div></div>
+        </div>
+        <div class="analytics-grid">
+          <div class="card" id="scoreDistCard" style="display:none">
+            <div class="card-header"><h3 class="card-title">Score Distribution</h3></div>
+            <div id="scoreHistogram" class="histogram"></div>
+          </div>
+          <div class="card" id="errorDistCard" style="display:none">
+            <div class="card-header"><h3 class="card-title">Error Distribution</h3></div>
+            <div id="errorDistBars" style="display:flex;flex-direction:column;gap:.5rem"></div>
+          </div>
+        </div>
+        <div class="card mb-4" id="questionAnalyticsCard" style="display:none">
+          <div class="card-header"><h3 class="card-title">Per-Question Performance</h3></div>
+          <div id="questionAnalyticsGrid" class="question-analytics-grid"></div>
+        </div>
+        <div class="card mb-4" id="rubricViewerCard" style="display:none">
+          <div class="card-header">
+            <h3 class="card-title"><svg class="icon-sm" style="margin-right:.35rem"><use href="#ico-book"/></svg>Generated Rubrics</h3>
+            <div style="display:flex;gap:.75rem;align-items:center">
+              <select id="rubricQSelect" class="form-control" style="width:auto;min-width:120px;padding:.25rem .5rem;font-size:.75rem"></select>
+              <span class="badge badge-info" id="rubricCountBadge">0 rubrics</span>
+            </div>
+          </div>
+          <div id="rubricDetail" style="min-height:100px"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3 class="card-title">All Grading Results</h3></div>
+          <div class="table-toolbar">
+            <input type="text" id="resultsSearch" class="search-input" placeholder="Search students, questions..." />
+            <div style="display:flex;gap:.5rem">
+              <select id="resultsFilter" class="form-control" style="width:auto;min-width:140px;padding:.35rem .5rem;font-size:.75rem">
+                <option value="all">All Results</option>
+                <option value="review">Needs Review</option>
+                <option value="good">Confident</option>
+              </select>
+              <button id="exportCSV" class="btn btn-secondary" style="font-size:.75rem;padding:.35rem .75rem"><svg class="icon-sm"><use href="#ico-download"/></svg> Export CSV</button>
+              <button id="exportReport" class="btn btn-primary" style="font-size:.75rem;padding:.35rem .75rem;background:var(--accent)"><svg class="icon-sm"><use href="#ico-file"/></svg> Print PDF Report</button>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Student</th><th>Question</th><th>Score</th><th>Accuracy</th><th>Errors</th><th>Review</th></tr></thead>
+              <tbody id="resultsTableBody"><tr><td colspan="6" class="text-muted text-center" style="padding:2rem">No results yet. Run the pipeline first.</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Review Queue -->
+      <section id="view-review" class="view-section hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+          <h2 style="margin:0">Review Queue</h2>
+          <span class="badge badge-warning" id="reviewCountBadge">0 items</span>
+        </div>
+        <div id="reviewWorkspace" class="hidden">
+          <div class="review-progress" id="reviewProgressBar">
+            <span class="review-progress-text" id="reviewProgressText">0 / 0 reviewed</span>
+            <div class="review-progress-bar"><div class="review-progress-fill" id="reviewProgressFill" style="width:0"></div></div>
+            <span class="review-status-indicator pending" id="reviewCurrentStatus">Pending</span>
+          </div>
+          <div class="review-nav">
+            <button class="btn btn-secondary" id="btnPrev" style="padding:.4rem .75rem"><svg class="icon-sm"><use href="#ico-chevleft"/></svg> Prev</button>
+            <span class="review-counter" id="reviewCounter">0 / 0</span>
+            <button class="btn btn-secondary" id="btnNext" style="padding:.4rem .75rem">Next <svg class="icon-sm"><use href="#ico-chevright"/></svg></button>
+          </div>
+          <div class="review-grid">
+            <div class="review-panel">
+              <div class="review-header">
+                <span class="text-muted" style="font-size:.8125rem" id="reviewStudentId">Student: &mdash;</span>
+                <span class="badge badge-info" id="reviewQuestionId">Q: &mdash;</span>
+              </div>
+              <div class="review-body">
+                <h4 class="mb-2" style="font-size:.8125rem">Cropped Student Answer</h4>
+                <img id="reviewCropImg" class="crop-display" src="" alt="Student Answer Crop" />
+                <h4 class="mb-2" style="font-size:.8125rem">AI Transcription</h4>
+                <div id="reviewTranscription" class="transcription-box">&mdash;</div>
+              </div>
+            </div>
+            <div class="review-panel">
+              <div class="review-header">
+                <span class="text-muted" style="font-size:.8125rem">AI Assessment</span>
+                <span id="reviewAccuracyBadge" class="badge">&mdash;</span>
+              </div>
+              <div class="review-body">
+                <div class="score-box">
+                  <div>
+                    <span class="text-muted" style="display:block;font-size:.6875rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem">Score</span>
+                    <div id="reviewScore" class="score-value">&mdash;</div>
+                  </div>
+                  <div style="text-align:right">
+                    <span class="text-muted" style="display:block;font-size:.6875rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem">Max</span>
+                    <div id="reviewMaxPoints" class="score-max">&mdash;</div>
+                  </div>
+                </div>
+                <h4 class="mb-2" style="font-size:.8125rem">Error Types</h4>
+                <div id="reviewErrorAxes" class="mb-4" style="min-height:1.5rem"><span class="text-muted" style="font-size:.75rem">&mdash;</span></div>
+                <h4 class="mb-2" style="font-size:.8125rem">AI Justification</h4>
+                <div id="reviewJustification" class="justification-box">&mdash;</div>
+                <div style="display:flex;gap:.75rem;margin-top:1rem">
+                  <button id="btnApprove" class="btn btn-success" style="flex:1;font-size:.8125rem"><svg class="icon-sm"><use href="#ico-check"/></svg> Approve (A)</button>
+                  <button id="btnOverride" class="btn btn-primary" style="flex:1;font-size:.8125rem;background:var(--warning);color:#000"><svg class="icon-sm"><use href="#ico-edit"/></svg> Override (O)</button>
+                  <button id="btnRegrade" class="btn btn-secondary" style="flex:1;font-size:.8125rem"><svg class="icon-sm"><use href="#ico-refresh"/></svg> Re-grade (R)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="keyboard-shortcuts mt-4">
+            <span class="text-muted">Shortcuts:</span>
+            <span><kbd class="kbd">&larr;</kbd> Prev</span>
+            <span><kbd class="kbd">&rarr;</kbd> Next</span>
+            <span><kbd class="kbd">A</kbd> Approve</span>
+            <span><kbd class="kbd">O</kbd> Override</span>
+            <span><kbd class="kbd">R</kbd> Re-grade</span>
+          </div>
+        </div>
+        <div id="reviewEmptyState" class="card" style="text-align:center;padding:3rem">
+          <p class="text-muted">No review items. Run the pipeline first, or all items are approved.</p>
+        </div>
+      </section>
+
+      <!-- 6. Plagiarism -->
+      <section id="view-plagiarism" class="view-section hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="margin:0">Plagiarism Detection</h2>
+          <span class="badge badge-danger" id="plagiarismBadge">0 flags</span>
+        </div>
+        <p class="text-secondary mb-4" style="font-size:.875rem">
+          Powered by <strong>ReJump Collusion Detection</strong> &mdash; identifies identical logic structures across student papers using semantic embeddings.
+        </p>
+        <div id="plagiarismList">
+          <div class="card" style="text-align:center;padding:3rem">
+            <p class="text-muted">No plagiarism data loaded yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Student Reports -->
+      <section id="view-students" class="view-section hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+          <h2 style="margin:0">Student Reports</h2>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <input type="text" id="studentSearch" class="search-input" placeholder="Search students..." style="width:220px">
+            <span class="badge badge-info" id="studentCountBadge">0 students</span>
+          </div>
+        </div>
+        <p class="text-secondary mb-4" style="font-size:.875rem">Per-student question-wise breakdown, total grades, error analysis, and focus recommendations.</p>
+        <div id="studentReportsList"></div>
+      </section>
+
+    </main>
+  </div>
+  <script src="/static/js/app.js?v=10"></script>
+</body>
+</html>
