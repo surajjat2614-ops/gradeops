@@ -72,7 +72,7 @@ ROLE_PERMISSIONS = {
 SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
-# Remove active_sessions
+# to remove th active_sessions
 
 
 
@@ -158,14 +158,14 @@ def _images_from_path(file_path: str) -> list[np.ndarray]:
         cv2.putText(dummy, "(No images uploaded)", (140, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (150, 150, 150), 1)
         return [dummy]
 
-    # Download from cloud if necessary
+    # Downloading from the cloud if necessary
     local_path = cloud_storage.download_to_local_temp(file_path)
 
     ext = Path(local_path).suffix.lower()
     if ext == ".pdf":
         return pdf_to_images(local_path)
 
-    # First, try OpenCV direct decode (works for most raster formats).
+    # First, trying the OpenCV direct decode which works for most raster formats.
     img = cv2.imread(local_path)
     if img is not None:
         return [img]
@@ -309,7 +309,7 @@ async def register(username: str = Form(...), password: str = Form(...), role: s
         raise HTTPException(status_code=400, detail="Role must be instructor or ta.")
     if db.user_exists(username):
         raise HTTPException(status_code=400, detail="Username already exists.")
-    # Use bcrypt for hashing
+    # Using the bcrypt for hashing
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     db.create_user(username, hashed, role)
     return {"message": "Registered successfully."}
@@ -318,7 +318,7 @@ async def register(username: str = Form(...), password: str = Form(...), role: s
 @app.post("/api/auth/login")
 async def login(username: str = Form(...), password: str = Form(...)):
     user = db.get_user(username)
-    # Support legacy sha256 for existing test users, or bcrypt
+    # Support legacy sha256 for existing test users or bcrypt
     is_valid = False
     if user:
         if len(user["password_hash"]) == 64 and not user["password_hash"].startswith("$"):
@@ -326,7 +326,7 @@ async def login(username: str = Form(...), password: str = Form(...)):
             if user["password_hash"] == hashlib.sha256(password.encode("utf-8")).hexdigest():
                 is_valid = True
         else:
-            # Use bcrypt directly
+            # Using bcrypt directly
             try:
                 is_valid = bcrypt.checkpw(password.encode('utf-8'), user["password_hash"].encode('utf-8'))
             except Exception:
@@ -344,7 +344,7 @@ async def login(username: str = Form(...), password: str = Form(...)):
 
 @app.post("/api/auth/logout")
 async def logout(request: Request):
-    # JWT is stateless, just delete the cookie
+    # if JWT is stateless, just delete the cookie
     response = RedirectResponse(url="/login", status_code=302)
     response.delete_cookie("gradeops_session")
     return response
@@ -417,7 +417,7 @@ async def add_question_from_crop(request: Request, session_id: str, payload: Que
     _, encoded = cv2.imencode('.png', clean_crop)
     snippet_path = cloud_storage.upload_bytes(encoded.tobytes(), ".png", "image/png")
 
-    # Download locally temporarily for transcription
+    # Downloading locally for temporary for transcription
     temp_path = cloud_storage.download_to_local_temp(snippet_path)
     question_text = transcribe_snippet(str(temp_path)).strip()
     if not question_text:
@@ -682,12 +682,12 @@ async def serve_snippet(request: Request, filename: str):
     if ".." in filename or "/" in filename or "\\" in filename:
         raise HTTPException(status_code=400, detail="Invalid filename")
 
-    # Check fallback directory
+    # Checking fallback directory
     snippet_file = cloud_storage.LOCAL_STORAGE_DIR / filename
     if snippet_file.exists() and snippet_file.is_file():
         return Response(content=snippet_file.read_bytes(), media_type="image/png")
 
-    # Fallback to old snippets dir for legacy compatibility
+    # Fallback to old snippets directory for legacy compatibility
     legacy_file = SNIPPETS_DIR / filename
     if legacy_file.exists() and legacy_file.is_file():
         return Response(content=legacy_file.read_bytes(), media_type="image/png")
