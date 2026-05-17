@@ -734,8 +734,6 @@ Each preset generates:
 ---
 
 <div align="center">
-  <br/>
-  <strong>Built to revolutionize academic grading, one pipeline at a time.</strong>
-  <br/><br/>
+  
   <sub>GradeOps Vision: Agentic AI Exam Grading | FastAPI | Qwen2.5-VL | LangGraph | Human-in-the-Loop</sub>
 </div>
