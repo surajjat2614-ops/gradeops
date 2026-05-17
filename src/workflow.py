@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 from langgraph.graph import StateGraph, END
 from src.state import GradeOpsState
@@ -24,4 +25,32 @@ def build_grading_graph():
     workflow.add_edge("grade_paper", "verify_grade")
     workflow.add_edge("verify_grade", END)
 
+=======
+
+from langgraph.graph import StateGraph, END
+from src.state import GradeOpsState
+from src.rubric_factory import generate_rubric
+from src.grader import grading_node, verification_node
+
+def rubric_node(state: GradeOpsState):
+    if state.get("rubric"):
+        return {}
+    rubric = generate_rubric(state["question_text"], state["marking_scheme_text"])
+    if rubric is None:
+        raise ValueError("Rubric generation failed — check model output")
+    return {"rubric": rubric}
+
+def build_grading_graph():
+    workflow = StateGraph(GradeOpsState)
+
+    workflow.add_node("create_rubric", rubric_node)
+    workflow.add_node("grade_paper", grading_node)
+    workflow.add_node("verify_grade", verification_node)
+
+    workflow.set_entry_point("create_rubric")
+    workflow.add_edge("create_rubric", "grade_paper")
+    workflow.add_edge("grade_paper", "verify_grade")
+    workflow.add_edge("verify_grade", END)
+
+>>>>>>> 15b1898f1ea7244db1b396e1e9d47837e0f8d22b
     return workflow.compile()
