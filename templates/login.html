@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GradeOps Vision | Login</title>
+  <link rel="stylesheet" href="/static/css/index.css" />
+  <style>
+    .form-pane{transition:transform .25s ease,opacity .25s ease;width:100%}
+    .form-pane.inactive{position:absolute;top:0;left:0;opacity:0;pointer-events:none;transform:translateX(16px)}
+    .form-pane.active{opacity:1;transform:translateX(0);position:relative}
+    .toggle-text{text-align:center;margin-top:1.25rem;font-size:.8125rem;color:var(--text-secondary)}
+    .toggle-link{color:var(--accent);cursor:pointer;font-weight:600}
+    .toggle-link:hover{text-decoration:underline}
+    .form-container{position:relative;overflow:hidden}
+  </style>
+</head>
+<body class="login-wrapper">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="ico-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="ico-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="ico-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+  </svg>
+  <div id="notificationContainer" class="notification-container"></div>
+  <div class="card login-card">
+    <div class="logo-large"><div class="logo-large-icon">G</div></div>
+    <h2 class="text-center mb-1" id="formTitle">Welcome Back</h2>
+    <p class="text-center text-secondary mb-6" id="formSubtitle" style="font-size:.875rem">Sign in to your grading dashboard.</p>
+    <div class="form-container">
+      <div id="loginPane" class="form-pane active">
+        <form id="loginForm">
+          <div class="form-group"><label class="form-label">Username</label><input class="form-control" name="username" placeholder="Enter username" required /></div>
+          <div class="form-group"><label class="form-label">Password</label><input class="form-control" name="password" type="password" placeholder="Enter password" required /></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:.5rem">Sign In</button>
+        </form>
+        <div class="toggle-text">No account? <span class="toggle-link" onclick="toggleForm('register')">Register</span></div>
+      </div>
+      <div id="registerPane" class="form-pane inactive">
+        <form id="registerForm">
+          <div class="form-group"><label class="form-label">Username</label><input class="form-control" name="username" placeholder="Choose username" required /></div>
+          <div class="form-group"><label class="form-label">Password</label><input class="form-control" name="password" type="password" placeholder="Create password" required /></div>
+          <div class="form-group"><label class="form-label">Role</label>
+            <select class="form-control" name="role"><option value="instructor">Instructor</option><option value="ta">Teaching Assistant</option></select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:.5rem">Create Account</button>
+        </form>
+        <div class="toggle-text">Have an account? <span class="toggle-link" onclick="toggleForm('login')">Sign in</span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function notify(m,t='info'){const c=document.getElementById('notificationContainer'),e=document.createElement('div');e.className=`notification ${t}`;
+      const iconIds={success:'ico-check',error:'ico-x',warning:'ico-alert',info:'ico-info'};
+      e.innerHTML=`<svg class="icon icon-sm"><use href="#${iconIds[t]||'ico-info'}"/></svg><span>${m}</span>`;c.appendChild(e);
+      setTimeout(()=>{e.style.opacity='0';e.style.transition='all .3s';setTimeout(()=>e.remove(),300)},3500)}
+    function toggleForm(t){
+      document.getElementById('loginPane').className=`form-pane ${t==='login'?'active':'inactive'}`;
+      document.getElementById('registerPane').className=`form-pane ${t==='register'?'active':'inactive'}`;
+      document.getElementById('formTitle').textContent=t==='login'?'Welcome Back':'Create Account';
+      document.getElementById('formSubtitle').textContent=t==='login'?'Sign in to your grading dashboard.':'Get started with GradeOps Vision.'}
+    document.getElementById('registerForm').addEventListener('submit',async e=>{e.preventDefault();
+      try{const r=await fetch('/api/auth/register',{method:'POST',body:new FormData(e.target)});const d=await r.json();
+        if(r.ok){notify('Registered! Please sign in.','success');e.target.reset();toggleForm('login')}else notify(d.detail,'error')}catch{notify('Network error.','error')}});
+    document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=e.target.querySelector('button');btn.textContent='Signing in...';btn.disabled=true;
+      try{const r=await fetch('/api/auth/login',{method:'POST',body:new FormData(e.target)});const d=await r.json();
+        if(!r.ok){notify(d.detail,'error');btn.textContent='Sign In';btn.disabled=false;return}window.location.href='/'}
+      catch{notify('Network error.','error');btn.textContent='Sign In';btn.disabled=false}});
+  </script>
+</body>
+</html>
