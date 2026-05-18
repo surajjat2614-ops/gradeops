@@ -76,3 +76,4 @@ def transcribe_snippet(image_path):
 if __name__ == "__main__":
     result = transcribe_snippet("C:/Users/hrima/gradeops-vision/data/snippets/page_0_question_2.png")
     print(result)
+    
