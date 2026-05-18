@@ -17,6 +17,7 @@
   <p>
     <strong>An end-to-end AI-powered system that reads handwritten exam papers, generates rubrics, grades with partial credit, detects plagiarism and compiles per-student reports. All running locally on consumer hardware with zero cloud API costs.</strong>
   </p>
+  <P> DEMO LINK - https://youtu.be/mGuIPiHq2Lg </P>
 </div>
 
 ---
