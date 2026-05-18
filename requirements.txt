@@ -26,3 +26,4 @@ langchain-core
 boto3
 PyMuPDF
 python-dotenv
+
